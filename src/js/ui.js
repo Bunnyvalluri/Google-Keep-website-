@@ -97,6 +97,11 @@ export function initUI(callbacks = {}) {
   // Settings management setup
   initSettings();
 
+  const modalReminderBtn = document.getElementById('modal-reminder-btn');
+  const modalDatetimePopover = document.getElementById('modal-datetime-popover');
+  const modalLabelMenuBtn = document.getElementById('modal-label-menu-btn');
+  const modalLabelsDropdown = document.getElementById('modal-labels-dropdown');
+
   // Add note click from header (opens reusable note modal)
   DOM.navAddNoteBtn.addEventListener('click', () => {
     openNoteModal(null, callbacks.onSaveNote, callbacks.onDeleteClick);
@@ -295,14 +300,10 @@ export function initUI(callbacks = {}) {
       creatorLabelsDropdown.style.display = 'none';
     }
     // Modal reminder popover
-    const modalReminderBtn = document.getElementById('modal-reminder-btn');
-    const modalDatetimePopover = document.getElementById('modal-datetime-popover');
     if (modalReminderBtn && !modalReminderBtn.contains(e.target) && !modalDatetimePopover.contains(e.target)) {
       modalDatetimePopover.style.display = 'none';
     }
     // Modal labels popover
-    const modalLabelMenuBtn = document.getElementById('modal-label-menu-btn');
-    const modalLabelsDropdown = document.getElementById('modal-labels-dropdown');
     if (modalLabelMenuBtn && !modalLabelMenuBtn.contains(e.target) && !modalLabelsDropdown.contains(e.target)) {
       modalLabelsDropdown.style.display = 'none';
     }

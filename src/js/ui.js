@@ -117,8 +117,13 @@ export function initUI(callbacks = {}) {
 
   // Sidebar toggle
   DOM.sidebarToggleBtn.addEventListener('click', () => {
-    DOM.sidebar.classList.toggle('collapsed');
-    DOM.sidebar.classList.toggle('open');
+    if (window.innerWidth <= 768) {
+      DOM.sidebar.classList.toggle('open');
+      DOM.sidebar.classList.remove('collapsed');
+    } else {
+      DOM.sidebar.classList.toggle('collapsed');
+      DOM.sidebar.classList.remove('open');
+    }
   });
 
   // Sidebar link clicks (visual active state)
@@ -135,6 +140,11 @@ export function initUI(callbacks = {}) {
       sidebarItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
       
+      // Close sidebar on mobile
+      if (window.innerWidth <= 768) {
+        DOM.sidebar.classList.remove('open');
+      }
+
       // Callback if sidebar page changes
       if (callbacks.onNavigation) {
         callbacks.onNavigation(item.dataset.nav);

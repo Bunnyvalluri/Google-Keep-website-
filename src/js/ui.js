@@ -109,6 +109,12 @@ let modalLabels = [];
 // Temporary state for profile editor
 let tempProfileAvatarBase64 = null;
 
+// Reusable modal elements at file scope to avoid block-scoping reference issues
+let modalReminderBtn = null;
+let modalDatetimePopover = null;
+let modalLabelMenuBtn = null;
+let modalLabelsDropdown = null;
+
 /**
  * Initializes global UI event listeners and setups themes
  */
@@ -119,10 +125,10 @@ export function initUI(callbacks = {}) {
   // Settings management setup
   initSettings();
 
-  const modalReminderBtn = document.getElementById('modal-reminder-btn');
-  const modalDatetimePopover = document.getElementById('modal-datetime-popover');
-  const modalLabelMenuBtn = document.getElementById('modal-label-menu-btn');
-  const modalLabelsDropdown = document.getElementById('modal-labels-dropdown');
+  modalReminderBtn = document.getElementById('modal-reminder-btn');
+  modalDatetimePopover = document.getElementById('modal-datetime-popover');
+  modalLabelMenuBtn = document.getElementById('modal-label-menu-btn');
+  modalLabelsDropdown = document.getElementById('modal-labels-dropdown');
 
   // Add note click from header (opens reusable note modal)
   DOM.navAddNoteBtn.addEventListener('click', () => {

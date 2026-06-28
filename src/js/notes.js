@@ -18,93 +18,11 @@ import { loadNotes, saveNotes } from './storage.js';
  * @property {string|null} image - Base64 image attachment
  */
 
-// Mock notes to showcase different tabs out-of-the-box
-export const MOCK_NOTES = [
-  {
-    id: 1,
-    title: "💡 Project Objective",
-    content: "Build a Google Keep clone using modular Vanilla JS + CSS and Vite. Next steps include adding persistence, edit, delete, pin, and search functionalities.",
-    pinned: true,
-    color: "sand",
-    createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
-    archived: false,
-    trashed: false,
-    reminder: null,
-    labels: ["Work"],
-    image: null
-  },
-  {
-    id: 2,
-    title: "🛒 Shopping List",
-    content: "• Organic avocados\n• Greek yogurt\n• Whole grain oats\n• Dark roast coffee",
-    pinned: true,
-    color: "mint",
-    createdAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-    archived: false,
-    trashed: false,
-    reminder: "Tomorrow, 8:00 AM",
-    labels: ["Personal"],
-    image: null
-  },
-  {
-    id: 3,
-    title: "🏃‍♂️ Daily Routine",
-    content: "Wake up at 6:00 AM\nDrink water & meditate\n30 mins light jog\nReview project backlog",
-    pinned: false,
-    color: "fog",
-    createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-    archived: false,
-    trashed: false,
-    reminder: "Everyday, 6:00 AM",
-    labels: ["Personal", "Health"],
-    image: null
-  },
-  {
-    id: 4,
-    title: "Quote of the day",
-    content: "Simplicity is the ultimate sophistication.\n- Leonardo da Vinci",
-    pinned: false,
-    color: "blossom",
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-    archived: false,
-    trashed: false,
-    reminder: null,
-    labels: [],
-    image: null
-  },
-  {
-    id: 5,
-    title: "📦 Archived Goal",
-    content: "This is an archived note. It demonstrates that the Archive section works correctly. You can unarchive this note to move it back to Notes.",
-    pinned: false,
-    color: "dusk",
-    createdAt: new Date(Date.now() - 3600000 * 30).toISOString(),
-    archived: true,
-    trashed: false,
-    reminder: null,
-    labels: ["ArchiveTest"],
-    image: null
-  },
-  {
-    id: 6,
-    title: "🗑️ Trashed Item",
-    content: "This note has been trashed. It will display a toolbar offering to Restore it or Delete it Forever.",
-    pinned: false,
-    color: "clay",
-    createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-    archived: false,
-    trashed: true,
-    reminder: null,
-    labels: [],
-    image: null
-  }
-];
+// Initialize notesState from localStorage (filtering out legacy mock notes if any exist)
+export let notesState = (loadNotes() || []).filter(note => note.id > 6);
 
-// Initialize notesState from localStorage, fallback to MOCK_NOTES
-export let notesState = loadNotes() || MOCK_NOTES;
-
-// Save initial mock notes if we just loaded them for the first time
-if (!loadNotes()) {
+// Sync cleaned state back to local storage if legacy mock notes were removed
+if (loadNotes() && loadNotes().some(note => note.id <= 6)) {
   saveNotes(notesState);
 }
 

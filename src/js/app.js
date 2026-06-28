@@ -30,10 +30,15 @@ import {
 // Application State
 let activeTab = 'notes';
 let searchQuery = '';
-let labelsState = loadLabels() || ['Work', 'Personal', 'Health', 'Inspiration'];
+let labelsState = loadLabels() || [];
 
-// Save default labels if they don't exist yet
-if (!loadLabels()) {
+// Migration: clean up legacy default labels if they exist
+if (labelsState.length === 4 && 
+    labelsState.includes('Work') && 
+    labelsState.includes('Personal') && 
+    labelsState.includes('Health') && 
+    labelsState.includes('Inspiration')) {
+  labelsState = [];
   saveLabels(labelsState);
 }
 

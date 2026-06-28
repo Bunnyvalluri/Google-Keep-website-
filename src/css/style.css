@@ -273,6 +273,202 @@ html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
   object-fit: cover;
 }
 
+/* Profile Container & Popover - Glassmorphism & Micro-animations */
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-popover {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 300px;
+  padding: 24px;
+  border-radius: var(--border-radius-md);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-premium);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transform-origin: top right;
+  animation: profileSlideIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes profileSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Avatar wrappers */
+.popover-avatar-wrapper {
+  position: relative;
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 16px auto;
+  border-radius: 50%;
+  border: 3px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: var(--shadow-subtle);
+  background: var(--bg-tertiary);
+  transition: border-color var(--transition-speed);
+}
+
+.popover-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Photo Upload overlay on hover in Edit Mode */
+.popover-avatar-wrapper.edit-active {
+  cursor: pointer;
+}
+
+.popover-avatar-wrapper.edit-active:hover {
+  border-color: var(--accent-color);
+}
+
+.avatar-upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6); /* Slate 900 semi-translucent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity var(--transition-speed);
+}
+
+.popover-avatar-wrapper.edit-active:hover .avatar-upload-overlay {
+  opacity: 1;
+}
+
+.avatar-upload-overlay .material-symbols-outlined {
+  font-size: 28px;
+}
+
+/* Info displays */
+.profile-name-display {
+  font-family: var(--font-main);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.profile-email-display {
+  font-family: var(--font-content);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+/* Edit inputs */
+.edit-inputs {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.input-group label {
+  font-family: var(--font-main);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-group input {
+  font-family: var(--font-content);
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: var(--focus-border);
+  box-shadow: 0 0 0 3px var(--focus-glow);
+}
+
+/* Popover Buttons */
+.popover-actions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-primary, .btn-secondary {
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: transform var(--transition-speed), background var(--transition-speed), color var(--transition-speed);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #d97706; /* darker amber */
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.btn-full {
+  width: 100%;
+}
+
 /* Icon Buttons with spring transitions */
 .icon-btn {
   background: transparent;

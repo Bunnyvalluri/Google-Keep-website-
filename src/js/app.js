@@ -18,13 +18,16 @@ import {
   openNoteModal, 
   removeNoteFromDOM, 
   openLabelsModal,
-  showToast
+  showToast,
+  updateProfileUI
 } from './ui.js';
 
 import { 
   loadLabels, 
   saveLabels,
-  saveNotes
+  saveNotes,
+  loadProfile,
+  saveProfile
 } from './storage.js';
 
 // Application State
@@ -62,8 +65,17 @@ export function initApp() {
     onCardClick: handleCardClick,
     onSearch: handleSearch,
     onNavigation: handleNavigation,
-    onEditLabelsClick: handleEditLabelsClick
+    onEditLabelsClick: handleEditLabelsClick,
+    onSaveProfile: handleSaveProfile
   });
+
+  // Load and apply user profile data on startup
+  const currentProfile = loadProfile() || {
+    name: "Valluri Rahul",
+    email: "vallurirahul3@gmail.com",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80"
+  };
+  updateProfileUI(currentProfile);
 
   // Render initial set of mock notes
   refreshNotesDisplay();
@@ -290,4 +302,13 @@ function getLabelCallbacks() {
  */
 function handleEditLabelsClick() {
   openLabelsModal(labelsState, getLabelCallbacks());
+}
+
+/**
+ * Handles profile save callback from UI
+ * @param {Object} profileData 
+ */
+function handleSaveProfile(profileData) {
+  saveProfile(profileData);
+  updateProfileUI(profileData);
 }

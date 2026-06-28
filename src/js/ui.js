@@ -67,6 +67,25 @@ export const DOM = {
   settingsResetBtn: document.getElementById('settings-reset-btn'),
   settingsModalCloseBtn: document.getElementById('settings-modal-close-btn'),
 
+  // Profile Selectors
+  profileContainer: document.getElementById('profile-container'),
+  navbarAvatarBtn: document.getElementById('navbar-avatar-btn'),
+  navbarAvatarImg: document.getElementById('navbar-avatar-img'),
+  profilePopover: document.getElementById('profile-popover'),
+  profileViewMode: document.getElementById('profile-view-mode'),
+  profileEditMode: document.getElementById('profile-edit-mode'),
+  popoverAvatarImg: document.getElementById('popover-avatar-img'),
+  popoverAvatarEditImg: document.getElementById('popover-avatar-edit-img'),
+  profileAvatarUploadTrigger: document.getElementById('profile-avatar-upload-trigger'),
+  profileAvatarInput: document.getElementById('profile-avatar-input'),
+  profileNameText: document.getElementById('profile-name-text'),
+  profileEmailText: document.getElementById('profile-email-text'),
+  profileNameInput: document.getElementById('profile-name-input'),
+  profileEmailInput: document.getElementById('profile-email-input'),
+  profileEditBtn: document.getElementById('profile-edit-btn'),
+  profileCancelBtn: document.getElementById('profile-cancel-btn'),
+  profileSaveBtn: document.getElementById('profile-save-btn'),
+
   // QuerySelectorAll elements
   sidebarItems: document.querySelectorAll('.sidebar-item'),
   colorDots: document.querySelectorAll('.color-dot')
@@ -86,6 +105,9 @@ let creatorLabels = [];
 let modalImageBase64 = null;
 let modalReminder = null;
 let modalLabels = [];
+
+// Temporary state for profile editor
+let tempProfileAvatarBase64 = null;
 
 /**
  * Initializes global UI event listeners and setups themes
@@ -321,6 +343,12 @@ export function initUI(callbacks = {}) {
     if (!e.target.closest(".toolbar-color-btn") && !e.target.closest(".card-color-picker")) {
       document.querySelectorAll(".card-color-picker").forEach(p => p.style.display = 'none');
     }
+    // Profile popover click outside
+    if (DOM.profilePopover && !DOM.profilePopover.contains(e.target) && !DOM.navbarAvatarBtn.contains(e.target)) {
+      DOM.profilePopover.style.display = 'none';
+      DOM.profileViewMode.style.display = 'flex';
+      DOM.profileEditMode.style.display = 'none';
+    }
     // Close creator card if clicked outside
     if (DOM.noteForm && !DOM.noteForm.contains(e.target) && DOM.creatorExpanded.style.display !== 'none') {
       collapseNoteCreator(callbacks.onNoteCreated);
@@ -442,6 +470,78 @@ export function initUI(callbacks = {}) {
       callbacks.onSearch('');
     }
   });
+
+  // Profile Popover Setup
+  if (DOM.navbarAvatarBtn && DOM.profilePopover) {
+    DOM.navbarAvatarBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isHidden = DOM.profilePopover.style.display === 'none';
+      
+      // Close other popovers
+      DOM.colorPickerPopover.style.display = 'none';
+      if (document.getElementById('creator-datetime-popover')) document.getElementById('creator-datetime-popover').style.display = 'none';
+      if (document.getElementById('creator-labels-dropdown')) document.getElementById('creator-labels-dropdown').style.display = 'none';
+      
+      DOM.profilePopover.style.display = isHidden ? 'flex' : 'none';
+      if (isHidden) {
+        DOM.profileViewMode.style.display = 'flex';
+        DOM.profileEditMode.style.display = 'none';
+      }
+    });
+
+    // Profile Edit Mode
+    DOM.profileEditBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      DOM.profileViewMode.style.display = 'none';
+      DOM.profileEditMode.style.display = 'block';
+      tempProfileAvatarBase64 = DOM.popoverAvatarImg.src;
+    });
+
+    // Avatar upload trigger
+    DOM.profileAvatarUploadTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      DOM.profileAvatarInput.click();
+    });
+
+    // Handle avatar file selection
+    DOM.profileAvatarInput.addEventListener('change', () => {
+      handleImageUpload(DOM.profileAvatarInput, DOM.popoverAvatarEditImg, DOM.profileAvatarUploadTrigger, (base64) => {
+        tempProfileAvatarBase64 = base64;
+      });
+    });
+
+    // Cancel edit
+    DOM.profileCancelBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      DOM.profileViewMode.style.display = 'flex';
+      DOM.profileEditMode.style.display = 'none';
+      tempProfileAvatarBase64 = null;
+    });
+
+    // Save profile changes
+    DOM.profileSaveBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const newName = DOM.profileNameInput.value.trim();
+      const newEmail = DOM.profileEmailInput.value.trim();
+
+      if (!newName) {
+        showToast('Name cannot be empty');
+        return;
+      }
+
+      if (callbacks.onSaveProfile) {
+        callbacks.onSaveProfile({
+          name: newName,
+          email: newEmail,
+          avatar: tempProfileAvatarBase64 || DOM.popoverAvatarImg.src
+        });
+      }
+
+      DOM.profileViewMode.style.display = 'flex';
+      DOM.profileEditMode.style.display = 'none';
+      showToast('Profile updated successfully');
+    });
+  }
 }
 
 /* Theme Setup & Toggling */
@@ -1328,4 +1428,24 @@ function applySettings(settings) {
   document.body.classList.remove('density-comfortable', 'density-compact');
   if (settings.density === 'comfortable') document.body.classList.add('density-comfortable');
   else if (settings.density === 'compact') document.body.classList.add('density-compact');
+}
+
+/**
+ * Updates all profile-related DOM elements with current user details.
+ * @param {Object} profile 
+ */
+export function updateProfileUI(profile) {
+  if (!profile) return;
+  
+  const avatarUrl = profile.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80';
+  
+  if (DOM.navbarAvatarImg) DOM.navbarAvatarImg.src = avatarUrl;
+  if (DOM.popoverAvatarImg) DOM.popoverAvatarImg.src = avatarUrl;
+  if (DOM.popoverAvatarEditImg) DOM.popoverAvatarEditImg.src = avatarUrl;
+  
+  if (DOM.profileNameText) DOM.profileNameText.textContent = profile.name || 'Valluri Rahul';
+  if (DOM.profileEmailText) DOM.profileEmailText.textContent = profile.email || 'vallurirahul3@gmail.com';
+  
+  if (DOM.profileNameInput) DOM.profileNameInput.value = profile.name || 'Valluri Rahul';
+  if (DOM.profileEmailInput) DOM.profileEmailInput.value = profile.email || 'vallurirahul3@gmail.com';
 }

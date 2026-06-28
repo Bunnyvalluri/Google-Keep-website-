@@ -4,7 +4,8 @@ const STORAGE_KEYS = {
   NOTES: 'keep_notes',
   LABELS: 'keep_labels',
   THEME: 'keep_theme',
-  SETTINGS: 'keep_settings'
+  SETTINGS: 'keep_settings',
+  PROFILE: 'keep_profile'
 };
 
 /**
@@ -81,6 +82,32 @@ export function loadSettings() {
     return raw ? JSON.parse(raw) : null;
   } catch (error) {
     console.error("Failed to load settings from localStorage:", error);
+    return null;
+  }
+}
+
+/**
+ * Saves profile data to localStorage.
+ * @param {Object} profile 
+ */
+export function saveProfile(profile) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(profile));
+  } catch (error) {
+    console.error("Failed to save profile to localStorage:", error);
+  }
+}
+
+/**
+ * Loads profile data from localStorage.
+ * @returns {Object|null}
+ */
+export function loadProfile() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.PROFILE);
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    console.error("Failed to load profile from localStorage:", error);
     return null;
   }
 }

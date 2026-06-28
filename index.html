@@ -59,8 +59,55 @@
           <button class="icon-btn" id="settings-btn" title="Settings">
             <span class="material-symbols-outlined">settings</span>
           </button>
-          <div class="profile-avatar">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="User Avatar" />
+          <div class="profile-container" id="profile-container">
+            <div class="profile-avatar" id="navbar-avatar-btn" title="Google Account">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="User Avatar" id="navbar-avatar-img" />
+            </div>
+
+            <!-- Profile Popover -->
+            <div class="profile-popover" id="profile-popover" style="display: none;">
+              <!-- View Mode -->
+              <div class="profile-view-mode" id="profile-view-mode">
+                <div class="popover-avatar-wrapper">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="User Avatar" class="popover-avatar" id="popover-avatar-img" />
+                </div>
+                <h3 class="profile-name-display" id="profile-name-text">Valluri Rahul</h3>
+                <p class="profile-email-display" id="profile-email-text">vallurirahul3@gmail.com</p>
+                <div class="popover-actions">
+                  <button type="button" class="btn-primary btn-full" id="profile-edit-btn">
+                    <span class="material-symbols-outlined">edit</span> Edit Profile
+                  </button>
+                </div>
+              </div>
+
+              <!-- Edit Mode -->
+              <div class="profile-edit-mode" id="profile-edit-mode" style="display: none;">
+                <div class="popover-avatar-wrapper edit-active" id="profile-avatar-upload-trigger" title="Upload new photo">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="User Avatar" class="popover-avatar" id="popover-avatar-edit-img" />
+                  <div class="avatar-upload-overlay">
+                    <span class="material-symbols-outlined">photo_camera</span>
+                  </div>
+                </div>
+                <!-- Hidden File Input for Avatar -->
+                <input type="file" id="profile-avatar-input" accept="image/*" style="display: none;" />
+
+                <div class="edit-inputs">
+                  <div class="input-group">
+                    <label for="profile-name-input">Name</label>
+                    <input type="text" id="profile-name-input" placeholder="Your Name" autocomplete="off" />
+                  </div>
+                  <div class="input-group">
+                    <label for="profile-email-input">Email</label>
+                    <input type="email" id="profile-email-input" placeholder="yourname@gmail.com" autocomplete="off" />
+                  </div>
+                </div>
+
+                <div class="popover-actions">
+                  <button type="button" class="btn-secondary" id="profile-cancel-btn">Cancel</button>
+                  <button type="button" class="btn-primary" id="profile-save-btn">Save</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </header>
